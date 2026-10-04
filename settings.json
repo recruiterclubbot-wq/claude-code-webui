@@ -1,0 +1,10 @@
+{
+  "telemetry.telemetryLevel": "off",
+  "security.workspace.trust.enabled": false,
+  "workbench.startupEditor": "none",
+  "search.followSymlinks": false,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true
+  }
+}
