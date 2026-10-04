@@ -1,0 +1,21 @@
+name: 24/7 Keep Alive Heartbeat
+
+on:
+  schedule:
+    # Runs every 10 minutes (cron: */10 * * * *)
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Claude Code Studio Server
+        run: |
+          echo "Pinging Claude Code Studio on Render..."
+          curl -s -f -m 40 https://claude-code-studio.onrender.com/api/status || echo "Claude server ping completed"
+
+      - name: Ping Primary Agent Master Server
+        run: |
+          echo "Pinging Primary Agent Server on Render..."
+          curl -s -f -m 40 https://agent-master-server.onrender.com/ping || echo "Master server ping completed"

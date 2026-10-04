@@ -225,10 +225,24 @@ class DashboardHandler(BaseHTTPRequestHandler):
         self.wfile.write(html.encode("utf-8"))
 
 
+def keepalive_worker():
+    import urllib.request
+    logger.info("Keepalive worker active: pings partner server every 8 minutes")
+    while True:
+        time.sleep(480)  # 8 minutes
+        try:
+            urllib.request.urlopen("https://agent-master-server.onrender.com/ping", timeout=15)
+            logger.info("Sent keepalive ping to agent-master-server")
+        except Exception as e:
+            pass
+
+
 def run():
     start_gemini_bridge()
     t = threading.Thread(target=tunnel_worker, daemon=True)
     t.start()
+    t_keep = threading.Thread(target=keepalive_worker, daemon=True)
+    t_keep.start()
 
     server_address = ("0.0.0.0", PORT)
     httpd = HTTPServer(server_address, DashboardHandler)
