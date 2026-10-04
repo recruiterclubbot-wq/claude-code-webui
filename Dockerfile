@@ -32,7 +32,7 @@ RUN chmod +x /app/entrypoint.sh /app/bridge.py /app/tunnel_manager.py
 
 ENV PORT=10000
 ENV BRIDGE_PORT=8082
-ENV GEMINI_MODEL=gemini-3.5-flash
+ENV GEMINI_MODEL=gemini-3.8-flash
 ENV TUNNEL_NAME=claude-studio
 
 EXPOSE 10000

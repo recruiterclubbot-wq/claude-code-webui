@@ -25,7 +25,8 @@ logger = logging.getLogger("ClaudeGeminiBridge")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 CASCADE_MODELS = [
-    os.getenv("GEMINI_MODEL", "gemini-3.5-flash"),
+    os.getenv("GEMINI_MODEL", "gemini-3.8-flash"),
+    "gemini-3.5-flash",
     "gemini-3.1-flash-lite",
     "gemini-2.5-flash"
 ]
@@ -142,9 +143,7 @@ def call_gemini(gemini_payload):
                 pass
             logger.warning(f"Gemini {model_name} HTTP {he.code}: {err_body[:200]}")
             last_error = he
-            if he.code in (404, 429, 503):
-                continue
-            raise
+            continue
         except Exception as e:
             logger.warning(f"Gemini {model_name} error: {e}")
             last_error = e
@@ -246,9 +245,10 @@ class BridgeHTTPHandler(BaseHTTPRequestHandler):
                 self.send_response(200)
                 self.send_header("Content-Type", "text/event-stream")
                 self.send_header("Cache-Control", "no-cache")
-                self.send_header("Connection", "keep-alive")
+                self.send_header("Connection", "close")
                 self.send_header("Access-Control-Allow-Origin", "*")
                 self.end_headers()
+                self.close_connection = True
 
                 def send_sse(event_name, data_obj):
                     line = f"event: {event_name}\ndata: {json.dumps(data_obj)}\n\n"
@@ -320,6 +320,10 @@ class BridgeHTTPHandler(BaseHTTPRequestHandler):
                 })
 
                 send_sse("message_stop", {"type": "message_stop"})
+                try:
+                    self.wfile.flush()
+                except Exception:
+                    pass
 
             else:
                 self.send_response(200)

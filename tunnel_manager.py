@@ -198,7 +198,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
       <ol class="list-decimal list-inside space-y-1">
         <li>В открывшемся окне <span class="text-blue-400">vscode.dev</span> откройте терминал (<code class="bg-gray-800 px-1 py-0.5 rounded">Ctrl + ~</code>).</li>
         <li>В терминале введите <code class="text-emerald-400 bg-gray-800 px-1.5 py-0.5 rounded font-mono">claude</code> и нажмите Enter.</li>
-        <li>Claude Code запустится с безлимитным подключением к Google Gemini 3.5.</li>
+        <li>Claude Code запустится с подключением к Antigravity / Google Gemini 3.8 Flash.</li>
       </ol>
     </div>
 
