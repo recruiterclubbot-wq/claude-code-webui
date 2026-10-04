@@ -1,6 +1,6 @@
 FROM node:20-bookworm-slim
 
-# Install system dependencies
+# Install system dependencies & curl
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     git \
@@ -9,10 +9,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+# Install official Code-Server via official standalone installer
+RUN curl -fsSL https://code-server.dev/install.sh | sh
 
-# Install official Code-Server (VS Code Web) and official Claude Code CLI
-RUN npm install -g code-server @anthropic-ai/claude-code
+# Install official Claude Code CLI globally
+RUN npm install -g @anthropic-ai/claude-code
+
+WORKDIR /app
 
 # Create workspace and configuration directories
 RUN mkdir -p /workspace /root/.claude /root/.local/share/code-server/User
